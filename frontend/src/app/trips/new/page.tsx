@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { API_URL } from '@/lib/config';
 
 export default function NewTrip() {
     const [title, setTitle] = useState('');
@@ -24,7 +25,7 @@ export default function NewTrip() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/trips', {
+            const res = await axios.post(`${API_URL}/trips`, {
                 title,
                 description,
                 startDate,

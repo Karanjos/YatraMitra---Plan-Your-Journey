@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Activity, Star, MapPin, Clock, Check, Info, Trash2, Users, Plus } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { API_URL } from '@/lib/config';
 
 const MOCK_ACTIVITIES = [
     { id: 'a1', name: 'Guided City Tour & Museum Walk', provider: 'CityWalkers', duration: '3 Hours', rating: 4.9, price: 45, type: 'Culture', description: 'Explore the heart of the city with an expert guide. Includes skip-the-line museum entry and a complimentary audio device.', included: ['Guide', 'Museum Entry', 'Audio Headset'], location: 'City Center' },
@@ -25,7 +26,7 @@ export default function ActivityBooking() {
 
     const fetchActivities = () => {
         if (id && token) {
-            axios.get(`http://localhost:5000/api/trips/${id}`, {
+            axios.get(`${API_URL}/trips/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(res => {
                 const stop = res.data.stops.find((s: any) => s.id === stopId);
@@ -42,7 +43,7 @@ export default function ActivityBooking() {
 
     const handleDelete = async (activityId: string) => {
         try {
-            await axios.delete(`http://localhost:5000/api/bookings/activity/${activityId}`, {
+            await axios.delete(`${API_URL}/bookings/activity/${activityId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchActivities(); // Refresh list after deletion
@@ -56,7 +57,7 @@ export default function ActivityBooking() {
         if (!selectedActivity) return;
 
         try {
-            await axios.post('http://localhost:5000/api/bookings/activity', {
+            await axios.post(`${API_URL}/bookings/activity`, {
                 tripStopId: stopId,
                 name: selectedActivity.name,
                 description: selectedActivity.description,

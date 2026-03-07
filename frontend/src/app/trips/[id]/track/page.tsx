@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { MapPin, Calendar, Clock, Navigation as NavIcon, CheckCircle, Circle } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 interface TripStop {
     id: string;
@@ -39,7 +40,7 @@ export default function TripTracking() {
 
     const fetchTrip = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/trips/${id}`, {
+            const res = await axios.get(`${API_URL}/trips/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             // Sort stops by arrival date to ensure chronological order along the timeline

@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Hotel, Star, MapPin, Check, Info, Trash2, Edit2, Users } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { API_URL } from '@/lib/config';
 
 const MOCK_HOTELS = [
     { id: 'h1', name: 'Grand Plaza Hotel', address: '123 Central Ave, Downtown', rating: 4.8, price: 250, amenities: ['Pool', 'Spa', 'Free WiFi'], description: 'A luxury 5-star hotel in the heart of downtown. Enjoy panoramic city views from our rooftop terrace.', roomType: 'Deluxe King Suite', cancellationPolicy: 'Free cancellation up to 48 hours before check-in.' },
@@ -27,7 +28,7 @@ export default function HotelBooking() {
 
     useEffect(() => {
         if (id && token) {
-            axios.get(`http://localhost:5000/api/trips/${id}`, {
+            axios.get(`${API_URL}/trips/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(res => {
                 const stop = res.data.stops.find((s: any) => s.id === stopId);
@@ -46,7 +47,7 @@ export default function HotelBooking() {
     const handleDelete = async () => {
         if (!existingBooking) return;
         try {
-            await axios.delete(`http://localhost:5000/api/bookings/hotel/${existingBooking.id}`, {
+            await axios.delete(`${API_URL}/bookings/hotel/${existingBooking.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             router.push(`/trips/${id}`);
@@ -71,11 +72,11 @@ export default function HotelBooking() {
             };
 
             if (isEditing && existingBooking) {
-                await axios.put(`http://localhost:5000/api/bookings/hotel/${existingBooking.id}`, data, {
+                await axios.put(`${API_URL}/bookings/hotel/${existingBooking.id}`, data, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } else {
-                await axios.post('http://localhost:5000/api/bookings/hotel', data, {
+                await axios.post(`${API_URL}/bookings/hotel`, data, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             }

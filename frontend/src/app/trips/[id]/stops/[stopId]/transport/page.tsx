@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Plane, Star, Clock, Check, Info, Briefcase, Trash2, Edit2, Users } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { API_URL } from '@/lib/config';
 
 const MOCK_FLIGHTS = [
     { id: 'f1', provider: 'AirFrance', departureTime: '08:00', arrivalTime: '10:30', duration: '2h 30m', rating: 4.6, price: 150, type: 'Flight', class: 'Economy', baggage: '1 Cabin Bag, 1 Checked Bag (23kg)', boardingGate: 'G12', description: 'Direct flight with standard economy seating and complimentary snacks.' },
@@ -27,7 +28,7 @@ export default function TransportBooking() {
 
     useEffect(() => {
         if (id && token) {
-            axios.get(`http://localhost:5000/api/trips/${id}`, {
+            axios.get(`${API_URL}/trips/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(res => {
                 const stop = res.data.stops.find((s: any) => s.id === stopId);
@@ -46,7 +47,7 @@ export default function TransportBooking() {
     const handleDelete = async () => {
         if (!existingBooking) return;
         try {
-            await axios.delete(`http://localhost:5000/api/bookings/transport/${existingBooking.id}`, {
+            await axios.delete(`${API_URL}/bookings/transport/${existingBooking.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             router.push(`/trips/${id}`);
@@ -71,11 +72,11 @@ export default function TransportBooking() {
             };
 
             if (isEditing && existingBooking) {
-                await axios.put(`http://localhost:5000/api/bookings/transport/${existingBooking.id}`, data, {
+                await axios.put(`${API_URL}/bookings/transport/${existingBooking.id}`, data, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } else {
-                await axios.post('http://localhost:5000/api/bookings/transport', data, {
+                await axios.post(`${API_URL}/bookings/transport`, data, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             }

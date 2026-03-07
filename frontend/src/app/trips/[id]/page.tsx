@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { MapPin, Calendar, Hotel, Plane, Activity, Plus, Trash2, Navigation as NavigationIcon, Edit2 } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 interface Booking {
     id: string;
@@ -65,7 +66,7 @@ export default function TripDetails() {
     const handleEditTrip = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:5000/api/trips/${id}`, editModeData, {
+            await axios.put(`${API_URL}/trips/${id}`, editModeData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowEditTrip(false);
@@ -83,7 +84,7 @@ export default function TripDetails() {
 
     const fetchTrip = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/trips/${id}`, {
+            const res = await axios.get(`${API_URL}/trips/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTrip(res.data);
@@ -103,7 +104,7 @@ export default function TripDetails() {
     const handleAddStop = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:5000/api/trips/${id}/stops`, {
+            await axios.post(`${API_URL}/trips/${id}/stops`, {
                 cityName,
                 arrivalDate,
                 departureDate,
@@ -121,7 +122,7 @@ export default function TripDetails() {
 
     const deleteStop = async (stopId: string) => {
         try {
-            await axios.delete(`http://localhost:5000/api/trips/stops/${stopId}`, {
+            await axios.delete(`${API_URL}/trips/stops/${stopId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchTrip();
@@ -294,7 +295,7 @@ export default function TripDetails() {
 
             {/* Edit Trip Modal */}
             {showEditTrip && editModeData && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-200">
                             <h3 className="text-lg font-bold text-gray-900">Edit Trip Details</h3>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Plus, Calendar, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import { API_URL } from '@/lib/config';
 
 interface Trip {
     id: string;
@@ -30,7 +31,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            axios.get('http://localhost:5000/api/trips', {
+            axios.get(`${API_URL}/trips`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => {

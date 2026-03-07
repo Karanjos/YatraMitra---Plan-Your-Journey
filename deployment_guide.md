@@ -36,6 +36,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+
+# Next.js requires public variables AT BUILD TIME
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN npm run build
 EXPOSE 3000
 CMD ["npm", "start"]
@@ -55,11 +60,12 @@ services:
     restart: always
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      args:
+        - NEXT_PUBLIC_API_URL=https://api.yourdomain.com/api
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=https://api.yourdomain.com/api
     restart: always
 ```
 

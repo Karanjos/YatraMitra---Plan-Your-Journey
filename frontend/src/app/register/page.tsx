@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
 import Navigation from '@/components/Navigation';
+import { API_URL } from '@/lib/config';
 
 export default function Register() {
     const [firstName, setFirstName] = useState('');
@@ -19,7 +20,7 @@ export default function Register() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/register', { firstName, lastName, email, password });
+            const res = await axios.post(`${API_URL}/auth/register`, { firstName, lastName, email, password });
             login(res.data.token, res.data.user);
             router.push('/dashboard');
         } catch (err: any) {

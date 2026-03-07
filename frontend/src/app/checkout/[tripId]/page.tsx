@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { CreditCard, CheckCircle, ShieldCheck } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 export default function Checkout() {
     const { tripId } = useParams();
@@ -25,7 +26,7 @@ export default function Checkout() {
 
     useEffect(() => {
         if (isAuthenticated && tripId) {
-            axios.get(`http://localhost:5000/api/trips/${tripId}`)
+            axios.get(`${API_URL}/trips/${tripId}`)
                 .then(res => {
                     setTrip(res.data);
                     let sum = 0;
@@ -54,13 +55,13 @@ export default function Checkout() {
         setProcessing(true);
         try {
             // 1. Create Payment
-            const paymentRes = await axios.post('http://localhost:5000/api/payments/create', {
+            const paymentRes = await axios.post(`${API_URL}/payments/create`, {
                 amount: total,
                 currency: 'USD'
             });
 
             // 2. Confirm Payment and mark PENDING bookings as CONFIRMED
-            await axios.post('http://localhost:5000/api/payments/confirm', {
+            await axios.post(`${API_URL}/payments/confirm`, {
                 paymentId: paymentRes.data.payment.id,
                 tripId: tripId // We added this in the backend early on
             });
