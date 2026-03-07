@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  trips     Trip[]
+  reviews   Review[]
+}
+
+model Trip {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  stops       TripStop[]
+}
+
+model TripStop {
+  id          String   @id @default(uuid())
+  cityName    String
+  arrivalDate DateTime
+  departureDate DateTime
+  orderIndex  Int
+  
+  tripId      String
+  trip        Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  hotelBooking     HotelBooking?
+  transportBooking TransportBooking?
+  activities       Activity[]
+}
+
+model HotelBooking {
+  id          String   @id @default(uuid())
+  hotelName   String
+  address     String
+  checkIn     DateTime
+  checkOut    DateTime
+  price       Float
+  status      String   @default("PENDING")
+  guests      Int      @default(1)
+  
+  tripStopId  String   @unique
+  tripStop    TripStop @relation(fields: [tripStopId], references: [id], onDelete: Cascade)
+}
+
+model TransportBooking {
+  id          String   @id @default(uuid())
+  type        String   // flight, train, bus, car
+  provider    String
+  departure   DateTime
+  arrival     DateTime
+  price       Float
+  status      String   @default("PENDING")
+  guests      Int      @default(1)
+  
+  tripStopId  String   @unique
+  tripStop    TripStop @relation(fields: [tripStopId], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  date        DateTime
+  price       Float
+  status      String   @default("PENDING")
+  guests      Int      @default(1)
+  
+  tripStopId  String
+  tripStop    TripStop @relation(fields: [tripStopId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  amount        Float
+  currency      String   @default("USD")
+  status        String   @default("PENDING")
+  stripePaymentId String?
+  createdAt     DateTime @default(now())
+  
+  userId        String? // optional if we want guest checkouts, but tying it to trip or user is better. Let's just track globally for simplistic mock.
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  rating      Int
+  comment     String?
+  createdAt   DateTime @default(now())
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
