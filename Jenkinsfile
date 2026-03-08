@@ -4,7 +4,7 @@ pipeline{
     environment{
         DOCKER_CREDS = credentials('dockerhub-credentials')
         EC2_KEY = credentials('ec2-ssh-key')
-        IMAGE_TAG = "#{env.BUILD_NUMBER}"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages{
