@@ -1,5 +1,7 @@
 pipeline{
-    agent any
+    agent {
+        label 'Jenkins_Agent' // Replace this with the label you created in the Node settings
+    }
 
     environment{
         DOCKER_CREDS = credentials('dockerhub-credentials')
