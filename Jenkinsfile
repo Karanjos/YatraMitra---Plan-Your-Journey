@@ -4,7 +4,7 @@ pipeline{
     }
 
     environment{
-        DOCKER_CREDS = credentials('dockerhub-credentials')
+        DOCKER_CREDS = credentials('docker-hub-creds')
         EC2_KEY = credentials('ec2-ssh-key')
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
