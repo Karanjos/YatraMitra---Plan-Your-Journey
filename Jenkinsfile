@@ -39,9 +39,10 @@ pipeline{
             steps{
                 sshagent(['ec2-ssh-key']){
                     sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@13.51.79.116 "mkdir -p /home/ubuntu/yatramitra"
                         scp -o StrictHostKeyChecking=no docker-compose.yml ubuntu@13.63.151.1:/home/ubuntu/yatramitra/docker-compose.yml
                         ssh -o StrictHostKeyChecking=no ubuntu@13.63.151.1 << EOF
-                            cd /home/ubuntu/YatraMitra
+                            cd /home/ubuntu/yatramitra
                         
                         # Stop existing containers
                         docker-compose down
