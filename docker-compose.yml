@@ -16,7 +16,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://postgres:bR5,*RRvjv6X!TY@db.fzveupxbhaiuerzbbrsa.supabase.co:5432/postgres
+      - DATABASE_URL=postgresql://postgres:bR5,*RRvjv6X!TY@db:5432/postgres
       - JWT_SECRET=143f7f0ea3572f5d5cbea7fce653b4d8de241ae141390912e1aae798a60b4aed59d0f84f2c49986a166721da458ca694742b66146d2b74f49e0fdca8a5fa0d48
     restart: always
     depends_on:
