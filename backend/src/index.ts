@@ -12,9 +12,9 @@ export const prisma = new PrismaClient();
 
 app.use(
   cors({
-    origin: "http://13.63.151.1", // Match the origin in your error message
+    origin: ["http://13.63.151.1:3000", "http://13.63.151.1", "http://localhost:3000"],
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 
