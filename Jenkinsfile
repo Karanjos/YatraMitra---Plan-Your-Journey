@@ -28,7 +28,7 @@ pipeline{
 
                     // Build and tag the Frontend image 
                     // ---> CHANGE THE URL HERE DEPENDING ON IF YOU ARE USING A DOMAIN OR JUST AN IP <---
-                    def frontendImage = docker.build("karanjoshi09/yatramitra-frontend:${IMAGE_TAG}", "--build-arg NEXT_PUBLIC_API_URL=http://13.51.79.116/api ./frontend")
+                    def frontendImage = docker.build("karanjoshi09/yatramitra-frontend:${IMAGE_TAG}", "--build-arg NEXT_PUBLIC_API_URL=http://13.63.151.1/api ./frontend")
                     frontendImage.push()
                     frontendImage.push("latest")
                 }
