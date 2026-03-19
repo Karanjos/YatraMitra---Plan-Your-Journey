@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { prisma } from '../index';
 import { AuthRequest } from '../middlewares/auth';
-import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 
 export const createPayment = async (req: AuthRequest, res: Response) => {
     try {
@@ -20,7 +20,7 @@ export const createPayment = async (req: AuthRequest, res: Response) => {
             },
         });
 
-        res.status(201).json({ payment, clientSecret: `mock_secret_${uuidv4()}` });
+        res.status(201).json({ payment, clientSecret: `mock_secret_${crypto.randomUUID()}` });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create payment' });
     }
@@ -32,7 +32,7 @@ export const confirmPayment = async (req: AuthRequest, res: Response) => {
 
         const payment = await prisma.payment.update({
             where: { id: paymentId },
-            data: { status: 'COMPLETED', stripePaymentId: `mock_stripe_${uuidv4()}` },
+            data: { status: 'COMPLETED', stripePaymentId: `mock_stripe_${crypto.randomUUID()}` },
         });
 
         // If a tripId is provided, confirm all pending bookings for that trip
